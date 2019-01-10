@@ -54,6 +54,6 @@ const photoGenerator = (productId) => {
   }
 };
 
-for (let i = 1; i < 101; i++) {
+for (let i = 1; i < 30000; i++) {
   photoGenerator(i);
 }

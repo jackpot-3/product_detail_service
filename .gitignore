@@ -5,3 +5,5 @@ node_modules/
 /data1.csv
 
 /photo_csv.csv
+
+.csv

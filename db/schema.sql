@@ -7,10 +7,10 @@ grant create on schema public to public;
 create schema public;
 
 CREATE TABLE IF NOT EXISTS products (
-	id SERIAL,
-	product_title varchar(255) NOT NULL,
+	id INT NOT NULL,
+	product_title text NOT NULL,
 	vendor_name varchar(50) NOT NULL,
-	review_average DECIMAL(2,1), 
+	review_average DECIMAL, 
 	review_count int DEFAULT 0,
 	answered_questions int, 
 	list_price varchar(15) NOT NULL,

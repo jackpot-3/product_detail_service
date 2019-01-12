@@ -3,17 +3,18 @@ var fs = require('fs');
 const photoGenerator = (productId) => {
   const randomIndex = Math.floor(Math.random() * products.length);
   const randomProduct = products[randomIndex]; 
-
+  let rowSet = '';
   for (let j = 0; j < randomProduct.length; j++) {
     if (j === 0) {
       let row = [randomProduct[j][0], randomProduct[j][1], productId, 1].join(',');
       row += '\r\n';
-      return row;
+      rowSet += row;
     }
     let row = [randomProduct[j][0], randomProduct[j][1], productId, 0].join(',');
     row += '\r\n';
-    return row;
+    rowSet += row;
   }
+  return rowSet;
 };
 
 const savePhotoRecord = (mainUrl, zoomUrl, productId, mainPhotoBool) => {
@@ -76,7 +77,7 @@ const fileWriter = (row) => {
   }
   let bigString = '';
   for (let i = 1; i < 10000; i++) {
-    const tempString = photoGenerator(i);
+    const tempString = photoGenerator(row + i);
     bigString += tempString;
   }
   fs.appendFile('photo_csv.csv', bigString, (err) => {

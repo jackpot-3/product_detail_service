@@ -1,9 +1,6 @@
 const csvWriter = require('csv-write-stream');
 const fs = require('file-system');
 const faker = require('faker');
-const promise = require('promise');
-
-const writer = csvWriter({ headers: ['productTitle', 'vendorName', 'reviewAverage', 'reviewCount', 'answeredQuestions', 'listPrice', 'discount', 'price', 'prime', 'description'] });
 
 //  helper functions
 let discount;
@@ -35,7 +32,7 @@ const descriptionGenerator = () => {
 
 
 const buildString = (rows) => {
-  if (rows >= 150000) {
+  if (rows >= 10000000) {
     return;
   }
   let bigBoyString = '';

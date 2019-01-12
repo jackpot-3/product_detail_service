@@ -89,8 +89,8 @@ mongoose.connection.on('open', () => {
                 console.log(error);
                 process.end();
               } else {
-                addedCount += 100000;
-                console.log('currently' + addedCount + 'saved');
+                insertCount += 100000;
+                console.log('currently' + insertCount + 'saved');
                 currentSet = [];
                 addedCount = 0;
                 s.resume();

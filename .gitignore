@@ -6,4 +6,4 @@ node_modules/
 
 /photo_csv.csv
 
-.csv
+*.csv

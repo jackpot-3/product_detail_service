@@ -17,19 +17,6 @@ const photoGenerator = (productId) => {
   return rowSet;
 };
 
-const savePhotoRecord = (mainUrl, zoomUrl, productId, mainPhotoBool) => {
-  const query = `INSERT INTO photos (main_url, zoom_url, product_id, main_photo) 
-  VALUES ('${mainUrl}', '${zoomUrl}', ${productId}, ${mainPhotoBool});`;
-  connection.query(query, (err) => {
-    if (err) {
-      throw (err);
-    } else {
-      console.log('success');
-    }
-  });
-};
-
-
 const products = [];
 products.push([
   ['https://images-na.ssl-images-amazon.com/images/I/61bMV3oE-8L._SX879_.jpg', 'https://images-na.ssl-images-amazon.com/images/I/61bMV3oE-8L._SL1010_.jpg'],

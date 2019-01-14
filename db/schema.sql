@@ -29,3 +29,5 @@ CREATE TABLE IF NOT EXISTS photos (
 	main_photo BOOLEAN NOT NULL,
 	FOREIGN KEY (product_id) REFERENCES products(id)
 );
+
+CREATE INDEX product_id ON photos (product_id);

@@ -22,9 +22,8 @@ const discountGenerator = (stringPrice) => {
 
 //  generate a stringified object of a random number of loremIpsum paragraphs
 const descriptionGenerator = () => {
-  const randomNum = Math.floor(Math.random() * 8) + 1;
   let descriptionArray = '';
-  for (let i = 0; i < randomNum; i++) {
+  for (let i = 0; i < 2; i++) {
     descriptionArray += faker.lorem.paragraph();
   }
   return descriptionArray;

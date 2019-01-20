@@ -1,21 +1,25 @@
 
-const pg = require('pg');
+const { Pool } = require('pg')
 
-const connection = pg.createConnection({
-  host: '172.17.0.2',
-  user: 'root',
-  password: 'Mightymang0',
-  database: 'product_overview',
+const pool = new Pool({
+  host: '18.220.88.83',
+  port: 5432,
+  user: 'postgres',
+  password: 'root',
+  database: 'elliottgranoff',
+  max: 2000,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
-connection.connect();
+pool.connect();
 
 
 const saveProductRecord = (arrayRecord) => {
   const query = `INSERT INTO products 
   (product_title, vendor_name, review_average, review_count, answered_questions,
   list_price, discount, price, prime, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  connection.query(query, arrayRecord, (err) => {
+  pool.query(query, arrayRecord, (err) => {
     if (err) {
       throw (err);
     } else {
@@ -27,7 +31,7 @@ const saveProductRecord = (arrayRecord) => {
 const savePhotoRecord = (mainUrl, zoomUrl, productId, mainPhotoBool) => {
   const query = `INSERT INTO photos (main_url, zoom_url, product_id, main_photo) 
   VALUES ('${mainUrl}', '${zoomUrl}', ${productId}, ${mainPhotoBool});`;
-  connection.query(query, (err) => {
+  pool.query(query, (err) => {
     if (err) {
       throw (err);
     } else {
@@ -39,10 +43,10 @@ const savePhotoRecord = (mainUrl, zoomUrl, productId, mainPhotoBool) => {
 const getPhotos = (req, res) => {
   const productId = req.params.productId;
   const query = `SELECT * FROM photos WHERE product_id = ${productId};`;
-  connection.query(query, (err, photos) => {
+  pool.query(query, (err, photos) => {
     if (err) {
       console.log(err);
-      res.statusCode(500).send();
+      res.send(err);
     } else {
       res.send(photos);
     }
@@ -52,14 +56,22 @@ const getPhotos = (req, res) => {
 const getProduct = (req, res) => {
   const id = req.params.productId;
   const query = `SELECT * FROM products WHERE id = ${id};`;
-  connection.query(query, (err, data) => {
+  pool.query(query, (err, data) => {
     if (err) {
-      res.statusCode(500).send();
+      res.send('broken');
     } else {
       res.send(data);
     }
   });
 };
+
+const deleteProduct = (req, res) => {
+  const id = req.params.productId;
+  const query = `DELETE FROM PRODUCTS WHERE ID = ${id}`;
+  pool.query(query, (err, data) => {
+    
+  })
+}
 
 
 module.exports = {

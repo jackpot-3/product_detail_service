@@ -7,7 +7,7 @@ grant create on schema public to public;
 create schema public;
 
 CREATE TABLE IF NOT EXISTS products (
-	id INT NOT NULL,
+	id INT NOT NULL ,
 	product_title text NOT NULL,
 	vendor_name varchar(50) NOT NULL,
 	review_average DECIMAL, 
@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS products (
 	price varchar(15) NOT NULL,
 	prime BOOLEAN NOT NULL,
 	description text,
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	CONSTRAINT unique_id UNIQUE(id);
 );
 
 CREATE TABLE IF NOT EXISTS photos (
@@ -31,3 +32,4 @@ CREATE TABLE IF NOT EXISTS photos (
 );
 
 CREATE INDEX product_id ON photos (product_id);
+CREATE INDEX main_id ON products (id);

@@ -20,17 +20,20 @@ const productSchema = new Schema({
     photo_id: String,
     main_url: String,
     zoom_url: String,
+    product_id: Number,
     main_photo: Boolean,
   }],
 });
 
 productSchema.index({ product_id: 1 }, { unique: true });
 
+
 const Products = mongoose.model('Products', productSchema);
 
 mongoose.connect('mongodb://127.0.0.1:27017');
 
 mongoose.connection.on('open', () => {
+  console.log('connected');
   let insertCount = 0;
   Products.remove({}, (err) => {
     if (err) {
@@ -39,7 +42,7 @@ mongoose.connection.on('open', () => {
       console.log('collection removed');
       let addedCount = 0;
       let currentSet = [];
-      const s = fs.createReadStream('mongo.csv')
+      const s = fs.createReadStream('./../mongo.csv')
         .pipe(es.split())
         .pipe(es.mapSync((line) => {
           s.pause();
@@ -64,32 +67,36 @@ mongoose.connection.on('open', () => {
               photo_id: data[11],
               main_url: data[12],
               zoom_url: data[13],
-              main_photo: Number(data[14]),
+              product_id: data[14],
+              main_photo: Number(data[15]),
             }, {
-              photo_id: data[15],
-              main_url: data[16],
-              zoom_url: data[17],
-              main_photo: Number(data[18]),
+              photo_id: data[16],
+              main_url: data[17],
+              zoom_url: data[18],
+              product_id: data[19],
+              main_photo: Number(data[20]),
             }, {
-              photo_id: data[19],
-              main_url: data[20],
-              zoom_url: data[21],
-              main_photo: Number(data[22]),
+              photo_id: data[21],
+              main_url: data[22],
+              zoom_url: data[23],
+              product_id: data[24],
+              main_photo: Number(data[25]),
             }, {
-              photo_id: data[23],
-              main_url: data[24],
-              zoom_url: data[25],
-              main_photo: Number(data[26]),
+              photo_id: data[26],
+              main_url: data[27],
+              zoom_url: data[28],
+              product_id: data[29],
+              main_photo: Number(data[30]),
             }],
           });
           addedCount += 1;
-          if (addedCount === 100000) {
+          if (addedCount === 25000) {
             Products.collection.insert(currentSet, (error) => {
               if (error) {
                 console.log(error);
                 process.end();
               } else {
-                insertCount += 100000;
+                insertCount += 25000;
                 console.log('currently' + insertCount + 'saved');
                 currentSet = [];
                 addedCount = 0;

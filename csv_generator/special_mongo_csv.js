@@ -25,7 +25,7 @@ const discountGenerator = (stringPrice) => {
 const descriptionGenerator = () => {
     const randomNum = Math.floor(Math.random() * 8) + 1;
     let descriptionArray = '';
-    for (let i = 0; i < randomNum; i++) {
+    for (let i = 0; i < 2; i++) {
         descriptionArray += faker.lorem.paragraph();
     }
     return descriptionArray;
@@ -39,22 +39,26 @@ const reviewAverageGenerator = () => {
     return result;
 };
 
+let photoId = 0;
 
 const photoGenerator = (productId) => {
-    const randomIndex = Math.floor(Math.random() * products.length);
-    const randomProduct = products[randomIndex];
-    let rowSet = '';
-    for (let j = 0; j < randomProduct.length; j++) {
-        if (j === 0) {
-            let row = [randomProduct[j][0], randomProduct[j][1], productId, 1].join('|');
-            row += '|';
-            rowSet += row;
-        }
-        let row = [randomProduct[j][0], randomProduct[j][1], productId, 0].join('|');
-        row += '|';
-        rowSet += row;
+  const randomIndex = Math.floor(Math.random() * products.length);
+  const randomProduct = products[randomIndex];
+  const photoIdPrefix = productId.toString() + 'p';
+  let rowSet = '';
+  for (let j = 0; j < randomProduct.length; j++) {
+    if (j === 0) {
+      photoId += 1;  
+      let row = [(photoId + j.toString()), randomProduct[j][0], randomProduct[j][1], productId, 1].join('|');
+      row += '|';
+      rowSet += row;
     }
-    return rowSet;
+    photoId += 1;
+    let row = [(photoId + j.toString()), randomProduct[j][0], randomProduct[j][1], productId, 0].join('|');
+    row += '|';
+    rowSet += row;
+  }
+  return rowSet;
 };
 
 

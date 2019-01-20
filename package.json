@@ -16,7 +16,8 @@
     "test": "jest --watch --config ./client/src/tests/jest.config.json",
     "docker-start": "node server/server.js & node db/productsTable_dataGenerator.js",
     "csv": "node csv_generator/csv_generator.js",
-    "photos": "node csv_generator/csv_photo_generator.js"
+    "photos": "node csv_generator/csv_photo_generator.js",
+    "mongo-csv": "node csv_generator/special_mongo_csv.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -31,7 +32,9 @@
     "mini-css-extract-plugin": "^0.5.0",
     "mongoose": "^5.4.3",
     "mysql": "^2.16.0",
+    "newrelic": "^4.13.0",
     "node-sass": "^4.11.0",
+    "performance-now": "^2.1.0",
     "pg": "^7.7.1",
     "promise": "^8.0.2",
     "react": "^16.6.3",

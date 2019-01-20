@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017');
-let db = mongoose.connection;
+mongoose.connect('mongodb://127.0.0.1:27017/admin', { useNewUrlParser: true, poolSize: 1000 });
+
 
 const Schema = mongoose.Schema;
 
@@ -27,73 +27,78 @@ const productSchema = new Schema({
 
 const Products = mongoose.model('Products', productSchema);
 
-const createProduct = (product, callback) => {
-  const entry = {
-    product_id: product[0],
-    product_title: product[1],
-    vendor_name: product[2],
-    review_average: product[3],
-    review_count: product[4],
-    answered_questions: product[5],
-    list_price: product[6],
-    discount: product[7],
-    price: product[8],
-    prime: product[9],
-    description: product[10],
-    photos: [{
-      photo_id: product[11],
-      main_url: product[12],
-      zoom_url: product[13],
-      main_photo: product[14],
-    }, {
-      photo_id: product[15],
-      main_url: product[16],
-      zoom_url: product[17],
-      main_photo: product[18],
-    }, {
-      photo_id: product[19],
-      main_url: product[20],
-      zoom_url: product[21],
-      main_photo: product[22],
-    }, {
-      photo_id: product[23],
-      main_url: product[24],
-      zoom_url: product[25],
-      main_photo: product[26],
-    }],
-  };
-  Products.insertOne(entry, (error) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('entry added');
-      callback();
-    }
-  });
-};
-//Read / GET - read an item
+//  Read / GET - read an item
 
-const getProduct = (id, callback) => {
-  Products.findOne({"product_id": id.toString()}, (error, result) => {
+const getProduct = (req, res) => {
+  const id = req.params.productId;
+  Products.find({ product_id: id }, { photos: 0, description: 0, product_title: 0 }, (error, response) => {
     if (error) {
-      console.log(error);
+      res.sendStatus(404);
     } else {
-      callback(result);
+      res.send(response[0]);
     }
   });
 };
 
-//Update / PUT - update an item
-const updateProduct(id, thisField, newVal, callback) {
-  Products.updateOne({"product_id": id.toString()}, { thisField: newVal }, (error, result) => {
-    if (error) {
-      console.log(error)
+const getPhotos = (req, res) => {
+  const id = req.params.productId;
+  Products.find({ product_id: id }, { photos: 1 }).then((result) => {
+    res.send(result[0].photos);
+  });
+};
+
+const deleteProduct = (req, res) => {
+  const id = req.params.productId;
+  Products.remove({ product_id: id}).then((err) => {
+    if (err) {
+      res.send(err);
     } else {
-      callback(result);
+      console.log('record deleted');
+      res.send('record deleted');
     }
-  })
-}
-//Delete / DELETE - delete an item
+  });
+};
+
+const deletePhoto = (req, res) => {
+  const id = req.params.productId;
+  const photoId = req.params.photoId;
+  console.log(photoId);
+  Products.find({ product_id: id }).then((result) => {
+    let current = result[0];
+    console.log(current.photos.length);
+    for (let i = 0; i < current.photos.length; i += 1) {
+      if (current.photos[i].photo_id === photoId) {
+        console.log('BANG!');
+        current.photos.splice(i, 1);
+        Products.update({ product_id: id }, current).then(()=> {
+          res.send('photo ' + photoId + ' removed');
+        });
+      }
+    }
+  });
+};
+
+const updateProduct = (req, res) => {
+  const id = req.params.productId;
+  console.log(req.body);
+};
+
+// Update / PUT - update an item
+// const updateProduct(id, thisField, newVal, callback) {
+//   Products.updateOne({"product_id": id.toString()}, { thisField: newVal }, (error, result) => {
+//     if (error) {
+//       console.log(error)
+//     } else {
+//       callback(result);
+//     }
+//   })
+// }
 
 
-module.exports = db;
+module.exports = {
+  getProduct,
+  getPhotos,
+  deletePhoto,
+  deleteProduct,
+  updateProduct,
+};
